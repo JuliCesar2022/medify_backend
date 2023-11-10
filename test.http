@@ -1,0 +1,118 @@
+GET http://dservicio-backend.test/api/v1/resetPassword/3014633433
+Accept: application/json
+
+###
+POST http://dservicio-backend.test/api/v1/changePassword
+Accept: application/json
+Content-Type: application/json
+
+{
+    "code": 104241,
+    "phone": 3014633433,
+    "password": "victor-barrera",
+    "password_confirmation": "victor-barrera"
+}
+
+###
+
+POST https://dservicio-backend.tranazula.com/api/v1/changePassword
+Accept: application/json
+Content-Type: application/json
+
+{
+    "code": 104241,
+    "phone": 3014633433,
+    "password": "victor-barrera",
+    "password_confirmation": "victor-barrera"
+}
+
+###
+GET https://dservicio-backend.tranazula.com/api/v1/resetPassword/3014633433
+Accept: application/json
+
+###
+
+POST http://dservicio-backend.test/api/user
+Accept: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="field-name"; filename="file.txt"
+
+< ./relative/path/to/local_file.txt
+--WebAppBoundary--
+
+###
+
+GET http://dservicio-backend.test/api/v1/user/findServiceById/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+###
+
+POST http://dservicio-backend.test/api/v1/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "username": "vbarrera@outlook.com",
+    "password": "password"
+}
+
+> {%
+    client.global.set("access_token", response.body.data.access_token);
+%}
+
+###
+
+POST http://dservicio-backend.test/api/refresh
+Content-Type: application/json
+
+{
+    "refresh_token": "def502008f50cb5b78a4dd2c45388a14eb5556400728e34c00a5a7a4e0c243db9771a972f52ca7bc7d41ed8dd987328981918af289b09df21714796d0a2b553051e7e311cefdb2d33c49b9a940b5149f9432b1508600411332e9de5bc61736d05cc2513019ed07b8dae851961c0e72138135339f9efba0cce3dfe442fc0a4a8b5700ffff090515d6c3fe67f8ab9a0ce8aa4ed9e9488a3904c6705d0d315e6456f7d30fc0f236eaf59222787ee85fdfeb441a7f918eee0c5963d80f6a4d33218b7a416b8064348815b87c092efb891d6f2fdf3678127d1f3b7c12a0551fcacb05a67e9b7416a333fd112dbcee00862b6530666dc07b017eb64ba7455252ceea0752528e628e3c42c796fcffeccd9498a42ff567f19ba6f2ee0480ead9bc2f31d9951fc41d4ea2771689be627b2e8864142f8c4a7c7c21de6b6945f2765bc60141b45e71d79c43a5e4cf40754d9b1ee844685a6d7fba2af987a6d3959a8952eeb286"
+}
+
+###
+
+GET http://dservicio-backend.test/api/v1/user/findPaymentById/1
+Accept: application/json
+
+
+###
+
+
+GET http://dservicio-backend.test/api/v1/listDoc
+Accept: application/json
+
+###
+
+GET http://dservicio-backend.test/api/v1/linkPse/1022
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{ access_token }}
+
+> {%
+    client.global.set("ticket_ID", response.body.factura);
+%}
+
+###
+
+GET http://dservicio-backend.test/api/v1/receivePayments/{{ ticket_ID}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{ access_token }}
+
+
+###
+
+POST http://dservicio-backend.test/api/v1/assignWork
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+    "service_id": "6462e181fe9397722f869e8b"
+}
+
+###
