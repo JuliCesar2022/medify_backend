@@ -23,10 +23,40 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Repositories\CodigosVerificacion;
 use App\Http\Repositories\ApiWhatsApp\ApiWhasApp;
+use App\Models\firebase_tokens;
+
 
 class AuthController extends Controller
 {
     use HelpersAdmin;
+
+    public function saveOrUpdateTokents($user,$request){
+
+        $existe = firebase_tokens::where('user_id', $user->id)->exists();
+        $post = new firebase_tokens();
+
+        if(!$existe){
+    
+            $post->user_id = $user->id;
+            $post->name = $user->nombre;
+            $post->firebase_token = $request->firebase_token;
+            $post->save();
+            
+        }else{
+            $firebase = $post::where('user_id', $user->id);
+            $firebase->update([
+                'name' => $user->nombre,
+                'firebase_token' => $request->firebase_token,
+                
+               
+            ]);
+        }
+
+
+
+
+
+    }
 
 
     public function login(LoginRequest $request): JsonResponse
@@ -37,8 +67,6 @@ class AuthController extends Controller
 
             $user = User::query()->where('email', $request->username)->first();
 
-          
-                
                 $response = $http->post(config('services.passport.login_endpoint'), [
                     'form_params' => [
                         'grant_type' => 'password',
@@ -52,8 +80,14 @@ class AuthController extends Controller
                     
                 ]); 
 
-                
+           
 
+                
+                
+            
+               
+                    self::saveOrUpdateTokents($user , $request );
+               
 
 
                 
@@ -122,6 +156,8 @@ class AuthController extends Controller
                 'Something went wrong on the server.'], $e->getCode());
         }
     }
+
+  
 
     public function sendResetLinkEmail(Request $request)
     {

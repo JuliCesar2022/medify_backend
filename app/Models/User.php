@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
+use Laravel\Passport\HasApiTokens as PassportHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -32,10 +33,9 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HybridRelations;
+    use PassportHasApiTokens, HasFactory, Notifiable, HybridRelations;
 
-    const TECNICO = 'TECNICO';
-    const CLIENTE = 'CLIENTE';
+   
     /**
      * The attributes that are mass assignable.
      *

@@ -9,11 +9,14 @@ use App\Http\Controllers\Api\RegistroController;
 use App\Http\Controllers\ChangeNumerController;
 use App\Http\Controllers\Api\ProfessionsController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\medicamento;
 use App\Http\Controllers\UpdateUser;
 use App\Models\Briefcase;
 use App\Models\ConfigModel;
 use App\Models\Movement;
 use App\Models\User;
+use Laravel\Passport\Token;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,27 +47,35 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/user', [UserController::class, 'store']);
+    
     Route::get('/mail',function(){
         Mail::to('julioabonae@gmail.com')->send(new CodeVerification);
         return "";
     });
-
-
+    
+    
     Route::middleware('auth:api')->group(function () {
-
-        Route::post('/logout', function () {
         
-            auth()->user()->tokens->each(function ($token, $key) {
-                $token->delete();
-            });
+        Route::post('/medicamento', [medicamento::class, 'store']);
+        Route::get('/medicamento', [medicamento::class, 'index']);
+        
 
-            
+        Route::post('/logout', function (Request $request) {
+            // Obtener el usuario autenticado
+            $user = Auth::guard('api')->user();
+        
+        
+                $request->user()->token()->revoke();
+                
+      
+        
             
             return response()->json([
                 'success' => true,
-                'data' => 'Logged out successfully'], 200);
-    
+                'message' => 'Logged out successfully'
+            ], 200);
         });
+        
          
 
 
